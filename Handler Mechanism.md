@@ -44,7 +44,7 @@ graph TD
         Looper -->|4. Dispatch Message| HD["Handler.handleMessage()"]:::javaLayer
     end
 
-    subgraph Queue ["Message Buffer"]
+    subgraph Queue ["Message \nBuffer"]
         MQ[("MessageQueue<br>(Chronological Linked List)")];
     end
 
