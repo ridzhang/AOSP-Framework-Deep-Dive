@@ -36,6 +36,27 @@ sequenceDiagram
         Looper->>Looper: msg.recycleUnchecked()
     end
 ```
+```mermaid
+graph TD
+    subgraph App Thread [应用线程 / 主线程]
+        H[Handler.sendMessage] -->|压入消息| MQ
+        Looper[Looper.loop] -->|循环取出| Msg[Message]
+        Msg -->|分发处理| HD[Handler.handleMessage]
+    end
+
+    subgraph MessageQueue [MessageQueue 消息队列]
+        MQ[(Message 链表队列)]
+    end
+
+    subgraph Native / Kernel [底层内核层]
+        MQ -->|无消息时阻塞| Native[epoll_wait 机制]
+        Native -->|新消息写入唤醒| MQ
+    end
+
+    style App Thread fill:#f9f,stroke:#333,stroke-width:2px
+    style MessageQueue fill:#bbf,stroke:#333,stroke-width:2px
+    style Native fill:#dfd,stroke:#333,stroke-width:2px
+```
 
 1. **Production Stage**: Any thread can use a specific thread's `Handler` to send a `Message`. The `Handler` safely routes the message into the corresponding thread's `MessageQueue`.
 2. **Polling & Consumption Stage**: The target thread's `Looper.loop()` executes an infinite loop, invoking `MessageQueue.next()` to fetch the next pending message.
