@@ -38,24 +38,24 @@ sequenceDiagram
 ```
 ```mermaid
 graph TD
-    subgraph App Thread [Application / Main Thread]
-        H[Handler.sendMessage] -->|Enqueue Message| MQ
-        Looper[Looper.loop] -->|Poll Message| Msg[Message]
-        Msg -->|Dispatch| HD[Handler.handleMessage]
+    subgraph App ["Java Framework Layer (Application / Main Thread)"]
+        H["Handler.sendMessage()"] -->|1. Enqueue Message| MQ
+        Looper["Looper.loop()"] -->|3. Poll / Fetch Message| MQ
+        Looper -->|4. Dispatch Message| HD["Handler.handleMessage()"]:::javaLayer
     end
 
-    subgraph MessageQueue [MessageQueue]
-        MQ[(Linked List of Messages)]
+    subgraph Queue ["Message Buffer"]
+        MQ[("MessageQueue<br>(Chronological Linked List)")];
     end
 
-    subgraph Native / Kernel [Native / Kernel Layer]
-        MQ -->|Block when empty| Native[epoll_wait Mechanism]
-        Native -->|Wake up on new message| MQ
+    subgraph Native ["Native / Linux Kernel Layer"]
+        MQ -.->|"2. If empty: nativePollOnce()"| Epoll["epoll_wait()<br>(Thread Suspended / Sleep)"]
+        Epoll -.->|"5. New message: write to mWakeFd"| MQ
     end
 
-    style App Thread fill:#f9f,stroke:#333,stroke-width:2px
-    style MessageQueue fill:#bbf,stroke:#333,stroke-width:2px
-    style Native fill:#dfd,stroke:#333,stroke-width:2px
+    class H,Looper javaLayer;
+    class MQ queueLayer;
+    class Epoll nativeLayer;
 ```
 
 1. **Production Stage**: Any thread can use a specific thread's `Handler` to send a `Message`. The `Handler` safely routes the message into the corresponding thread's `MessageQueue`.
