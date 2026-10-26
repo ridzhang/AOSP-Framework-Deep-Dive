@@ -38,19 +38,19 @@ sequenceDiagram
 ```
 ```mermaid
 graph TD
-    subgraph App Thread [应用线程 / 主线程]
-        H[Handler.sendMessage] -->|压入消息| MQ
-        Looper[Looper.loop] -->|循环取出| Msg[Message]
-        Msg -->|分发处理| HD[Handler.handleMessage]
+    subgraph App Thread [Application / Main Thread]
+        H[Handler.sendMessage] -->|Enqueue Message| MQ
+        Looper[Looper.loop] -->|Poll Message| Msg[Message]
+        Msg -->|Dispatch| HD[Handler.handleMessage]
     end
 
-    subgraph MessageQueue [MessageQueue 消息队列]
-        MQ[(Message 链表队列)]
+    subgraph MessageQueue [MessageQueue]
+        MQ[(Linked List of Messages)]
     end
 
-    subgraph Native / Kernel [底层内核层]
-        MQ -->|无消息时阻塞| Native[epoll_wait 机制]
-        Native -->|新消息写入唤醒| MQ
+    subgraph Native / Kernel [Native / Kernel Layer]
+        MQ -->|Block when empty| Native[epoll_wait Mechanism]
+        Native -->|Wake up on new message| MQ
     end
 
     style App Thread fill:#f9f,stroke:#333,stroke-width:2px
