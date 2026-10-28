@@ -37,7 +37,10 @@ sequenceDiagram
     AppThread->>User: First Frame Rendered (Choreographer + VSYNC)
 
 ```
+---
+
 ## 3.Component Interaction and Execution Flow between Launcher, AMS, Zygote, and App Process
+
 ```mermaid
 graph TD
     %% 现代化高对比度样式定义
@@ -60,7 +63,7 @@ graph TD
     %% 补全双向交互
     App -->|"1. attachApplication()<br>[Binder IPC register]"| AMS
     AMS -->|"2. scheduleTransaction()<br>[Binder IPC ]"| App
-
+```
 ---
 
 ## 3. Execution Phases Breakdown
