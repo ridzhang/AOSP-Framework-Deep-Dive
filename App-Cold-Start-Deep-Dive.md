@@ -66,7 +66,7 @@ graph TD
 ```
 ---
 
-## 3. Execution Phases Breakdown
+## 4. Execution Phases Breakdown
 
 ### Phase 1: Request & Process Decision (Launcher ➔ AMS)
 
@@ -98,7 +98,7 @@ graph TD
 
 ---
 
-## 4. Key Performance Bottlenecks & System Mitigations
+## 5. Key Performance Bottlenecks & System Mitigations
 
 | Stage | Potential Bottleneck | Framework Mitigation / Best Practices |
 | --- | --- | --- |
