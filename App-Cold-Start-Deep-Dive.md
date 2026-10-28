@@ -37,6 +37,29 @@ sequenceDiagram
     AppThread->>User: First Frame Rendered (Choreographer + VSYNC)
 
 ```
+## 3.Component Interaction and Execution Flow between Launcher, AMS, Zygote, and App Process
+```mermaid
+graph TD
+    %% 现代化高对比度样式定义
+    classDef launcherClass fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1,font-weight:bold;
+    classDef amsClass fill:#FFF3E0,stroke:#EF6C00,stroke-width:2px,color:#E65100,font-weight:bold;
+    classDef zygoteClass fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C,font-weight:bold;
+    classDef appClass fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20,font-weight:bold;
+
+    %% 节点定义
+    Launcher["1.Launcher App"]:::launcherClass
+    AMS["2.ActivityManagerService (AMS)"]:::amsClass
+    Zygote["3.Zygote Process"]:::zygoteClass
+    App["4.App Process (ActivityThread)"]:::appClass
+
+    %% 完整的调用与通信流向
+    Launcher -->|"startActivity()<br>[Binder IPC]"| AMS
+    AMS -->|"Process.start()<br>[Local Socket]"| Zygote
+    Zygote -->|"forkAndSpecialize()<br>[Process Spawning]"| App
+    
+    %% 补全双向交互
+    App -->|"1. attachApplication()<br>[Binder IPC register]"| AMS
+    AMS -->|"2. scheduleTransaction()<br>[Binder IPC ]"| App
 
 ---
 
