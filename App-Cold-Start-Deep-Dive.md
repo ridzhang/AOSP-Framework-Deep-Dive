@@ -106,5 +106,4 @@ graph TD
 | **Application Launch** | Heavy I/O or blocking operations in `Application.onCreate()`. | Defer non-critical initializations via `IdleHandler` or background threads. |
 | **First Frame Render** | Deep View hierarchy or complex layout inflation. | Flatten layout structures, leverage AsyncLayoutInflater, defer view stubs. |
 
-```
 
