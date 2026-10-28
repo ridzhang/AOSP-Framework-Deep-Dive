@@ -39,7 +39,7 @@ sequenceDiagram
 ```
 ---
 
-## 3.Component Interaction and Execution Flow between Launcher, AMS, Zygote, and App Process
+## 3. Component Interaction and Execution Flow between Launcher, AMS, Zygote, and App Process
 
 ```mermaid
 graph TD
